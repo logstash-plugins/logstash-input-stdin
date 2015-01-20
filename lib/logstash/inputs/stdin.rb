@@ -9,7 +9,6 @@ require "socket" # for Socket.gethostname
 # want to join lines, you'll want to use the multiline filter.
 class LogStash::Inputs::Stdin < LogStash::Inputs::Base
   config_name "stdin"
-  milestone 3
 
   default :codec, "line"
 
