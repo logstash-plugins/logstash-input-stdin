@@ -13,18 +13,13 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
 
   default :codec, "line"
 
-  def initialize(*args)
-    super(*args)
-    @stop_requested = Concurrent::AtomicBoolean.new(false)
-  end
-
   def register
     @host = Socket.gethostname
     fix_streaming_codecs
   end
 
   def run(queue)
-    while @stop_requested.false?
+    while !stop?
       begin
         # Based on some testing, there is no way to interrupt an IO.sysread nor
         # IO.select call in JRuby. Bummer :(
@@ -34,23 +29,17 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
           event["host"] = @host if !event.include?("host")
           queue << event
         end
-      rescue IOError, EOFError, LogStash::ShutdownSignal
-        # stdin closed or a requested shutdown
-        @stop_requested.make_true
+      rescue IOError, EOFError # stdin closed
         break
       rescue => e
         # ignore any exception in the shutdown process
-        break if @stop_requested.true?
+        break if stop?
         raise(e)
       end
     end
-    finished
   end
 
-  def teardown
-    @stop_requested.make_true
-    @logger.debug("stdin shutting down.")
+  def stop
     $stdin.close rescue nil
-    finished
   end
 end
