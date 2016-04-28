@@ -26,7 +26,7 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
         data = $stdin.sysread(16384)
         @codec.decode(data) do |event|
           decorate(event)
-          event["host"] = @host if !event.include?("host")
+          event.set("host", @host) if !event.include?("host")
           queue << event
         end
       rescue IOError, EOFError # stdin closed
