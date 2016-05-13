@@ -38,8 +38,4 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
       end
     end
   end
-
-  def stop
-    $stdin.close rescue nil
-  end
 end
