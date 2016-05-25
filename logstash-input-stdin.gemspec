@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 
   s.name            = 'logstash-input-stdin'
-  s.version         = '3.0.1'
+  s.version         = '3.1.0'
   s.licenses        = ['Apache License (2.0)']
   s.summary         = "Read events from standard input"
   s.description     = "This gem is a Logstash plugin required to be installed on top of the Logstash core pipeline using $LS_HOME/bin/logstash-plugin install gemname. This gem is not a stand-alone program"
@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # Files
-  s.files = `git ls-files`.split($\)+::Dir.glob('vendor/*')
+  s.files = Dir['lib/**/*', 'spec/**/*', '*.gemspec', '*.md', 'CONTRIBUTORS', 'Gemfile', 'LICENSE', 'NOTICE.TXT', 'CHANGELOG.md', 'README.md']
 
   # Tests
   s.test_files = s.files.grep(%r{^(test|spec|features)/})
@@ -30,4 +30,3 @@ Gem::Specification.new do |s|
   s.add_development_dependency "logstash-codec-json_lines"
   s.add_development_dependency "logstash-devutils"
 end
-
