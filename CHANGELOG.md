@@ -1,3 +1,6 @@
+## 3.1.1
+  - Relax constraint on logstash-core-plugin-api to >= 1.60 <= 2.99
+
 ## 3.1.0
   - Use interruptible stdin channel when possible, see https://github.com/logstash-plugins/logstash-input-stdin/pull/3
 
