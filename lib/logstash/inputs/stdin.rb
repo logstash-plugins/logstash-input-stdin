@@ -32,6 +32,7 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
   end
 
   def run(queue)
+    puts "The stdin plugin is now waiting for input:" if $stdin.tty?
     while !stop?
       if data = stdin_read
         @codec.decode(data) do |event|
