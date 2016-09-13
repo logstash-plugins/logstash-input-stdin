@@ -1,3 +1,6 @@
+## 3.2.0
+  - Add a startup message if logstash is started on a terminal
+
 ## 3.1.1
   - Relax constraint on logstash-core-plugin-api to >= 1.60 <= 2.99
 
