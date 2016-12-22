@@ -8,7 +8,7 @@ require "jruby-stdin-channel"
 # Read events from standard input.
 #
 # By default, each event is assumed to be one line. If you
-# want to join lines, you'll want to use the multiline filter.
+# want to join lines, you'll want to use the multiline codec.
 class LogStash::Inputs::Stdin < LogStash::Inputs::Base
   config_name "stdin"
 
