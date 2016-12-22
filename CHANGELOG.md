@@ -1,3 +1,6 @@
+## 3.2.1
+  - Docs: Remove mention of the multiline filter plugin because it's no longer supported
+
 ## 3.2.0
   - Add a startup message if logstash is started on a terminal
 
