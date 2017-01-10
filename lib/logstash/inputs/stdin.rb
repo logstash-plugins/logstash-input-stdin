@@ -44,6 +44,12 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
     end
   end
 
+  # When a configuration is using this plugin
+  # We are defining a blocking pipeline which cannot be reloaded
+  def self.reloadable?
+    false
+  end
+
   private
 
   def default_stop

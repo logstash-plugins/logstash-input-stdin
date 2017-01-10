@@ -4,6 +4,14 @@ require "socket"
 require "logstash/inputs/stdin"
 
 describe LogStash::Inputs::Stdin do
+  context ".reloadable?" do
+    subject { described_class }
+
+    it "returns true" do
+      expect(subject.reloadable?).to be_falsey
+    end
+  end
+
   context "codec (PR #1372)" do
     it "switches from plain to line" do
       require "logstash/codecs/plain"
@@ -12,6 +20,7 @@ describe LogStash::Inputs::Stdin do
       plugin.register
       insist { plugin.codec }.is_a?(LogStash::Codecs::Line)
     end
+
     it "switches from json to json_lines" do
       require "logstash/codecs/json"
       require "logstash/codecs/json_lines"
