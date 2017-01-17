@@ -1,3 +1,6 @@
+## 3.2.2
+  - Explicitely mark this plugin non reloadable following the changes from https://github.com/elastic/logstash/pull/6499
+
 ## 3.2.1
   - Docs: Remove mention of the multiline filter plugin because it's no longer supported
 
