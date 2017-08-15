@@ -1,3 +1,6 @@
+## 3.2.4
+  - Fix some documentation issues
+
 ## 3.2.2
   - Explicitely mark this plugin non reloadable following the changes from https://github.com/elastic/logstash/pull/6499
 
