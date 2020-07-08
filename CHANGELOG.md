@@ -1,3 +1,6 @@
+## 3.3.0
+  - Removed usage of jruby-stdin-channel which is not required anymore [#19](https://github.com/logstash-plugins/logstash-input-stdin/pull/19)
+
 ## 3.2.6
   - Docs: Set the default_codec doc attribute.
 
