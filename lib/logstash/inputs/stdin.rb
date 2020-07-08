@@ -3,7 +3,6 @@ require "logstash/inputs/base"
 require "logstash/namespace"
 require "concurrent/atomics"
 require "socket" # for Socket.gethostname
-require "jruby-stdin-channel"
 
 # Read events from standard input.
 #
@@ -17,16 +16,6 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
   READ_SIZE = 16384
 
   def register
-    begin
-      @stdin = StdinChannel::Reader.new
-      self.class.module_exec { alias_method :stdin_read, :channel_read }
-      self.class.module_exec { alias_method :stop, :channel_stop}
-    rescue => e
-      @logger.debug("fallback to reading from regular $stdin", :exception => e)
-      self.class.module_exec { alias_method :stdin_read, :default_read }
-      self.class.module_exec { alias_method :stop, :default_stop }
-    end
-
     @host = Socket.gethostname
     fix_streaming_codecs
   end
@@ -52,30 +41,14 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
 
   private
 
-  def default_stop
+  def stop
     $stdin.close rescue nil
   end
 
-  def channel_stop
-    @stdin.close rescue nil
-  end
-
-  def default_read
+  def stdin_read
     begin
       return $stdin.sysread(READ_SIZE)
     rescue IOError, EOFError
-      do_stop
-    rescue => e
-      # ignore any exception in the shutdown process
-      raise(e) unless stop?
-    end
-    nil
-  end
-
-  def channel_read
-    begin
-      return @stdin.read(READ_SIZE)
-    rescue IOError, EOFError, StdinChannel::ClosedChannelError
       do_stop
     rescue => e
       # ignore any exception in the shutdown process
