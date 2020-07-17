@@ -24,6 +24,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "logstash-codec-line"
   s.add_runtime_dependency "concurrent-ruby"
 
+  # for JRuby >= 9.1.15.0, see https://github.com/logstash-plugins/logstash-input-stdin/pull/19
+  s.add_runtime_dependency "logstash-core", ">= 6.7.0"
+
   s.add_development_dependency "logstash-codec-plain"
   s.add_development_dependency "logstash-codec-json"
   s.add_development_dependency "logstash-codec-json_lines"
