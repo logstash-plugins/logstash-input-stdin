@@ -18,6 +18,12 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
 
   READ_SIZE = 16384
 
+  # When a configuration is using this plugin
+  # We are defining a blocking pipeline which cannot be reloaded
+  def self.reloadable?
+    false
+  end
+
   def initialize(*params)
     super
 
@@ -46,12 +52,6 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
         process(data, queue)
       end
     end
-  end
-
-  # When a configuration is using this plugin
-  # We are defining a blocking pipeline which cannot be reloaded
-  def self.reloadable?
-    false
   end
 
   private
