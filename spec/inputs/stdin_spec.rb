@@ -69,4 +69,34 @@ describe LogStash::Inputs::Stdin do
 
     end
   end
+
+  context 'ECS disabled' do
+
+    subject { LogStash::Inputs::Stdin.new('ecs_compatibility' => 'disabled') }
+
+    before(:each) do
+      subject.register
+
+      subject.send :process, stdin_data, queue
+
+      expect( queue.size ).to eql 1
+    end
+
+    let(:queue) { Queue.new }
+
+    let(:stdin_data) { "a bar foo\n" }
+
+    after { subject.close }
+
+    it "sets message" do
+      event = queue.pop
+      expect( event.get('message') ).to eql 'a bar foo'
+    end
+
+    it "sets hostname" do
+      event = queue.pop
+      expect( event.get('host') ).to eql `hostname`.strip
+    end
+
+  end
 end
