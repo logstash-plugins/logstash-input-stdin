@@ -1,7 +1,7 @@
 # encoding: utf-8
 require "logstash/inputs/base"
 require "logstash/namespace"
-require "concurrent/atomics"
+require 'logstash/plugin_mixins/ecs_compatibility_support'
 require "socket" # for Socket.gethostname
 require "jruby-stdin-channel"
 
@@ -10,11 +10,26 @@ require "jruby-stdin-channel"
 # By default, each event is assumed to be one line. If you
 # want to join lines, you'll want to use the multiline codec.
 class LogStash::Inputs::Stdin < LogStash::Inputs::Base
+  include LogStash::PluginMixins::ECSCompatibilitySupport(:disabled, :v1)
+
   config_name "stdin"
 
   default :codec, "line"
 
   READ_SIZE = 16384
+
+  # When a configuration is using this plugin
+  # We are defining a blocking pipeline which cannot be reloaded
+  def self.reloadable?
+    false
+  end
+
+  def initialize(*params)
+    super
+
+    @host_key = ecs_select[disabled: 'host', v1: '[host][hostname]']
+    @event_original_key = ecs_select[disabled: nil, v1: '[event][original]']
+  end
 
   def register
     begin
@@ -35,22 +50,23 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
     puts "The stdin plugin is now waiting for input:" if $stdin.tty?
     while !stop?
       if data = stdin_read
-        @codec.decode(data) do |event|
-          decorate(event)
-          event.set("host", @host) if !event.include?("host")
-          queue << event
-        end
+        process(data, queue)
       end
     end
   end
 
-  # When a configuration is using this plugin
-  # We are defining a blocking pipeline which cannot be reloaded
-  def self.reloadable?
-    false
-  end
-
   private
+
+  def process(data, queue)
+    @codec.decode(data) do |event|
+      decorate(event)
+      if @event_original_key && !event.include?(@event_original_key)
+        event.set(@event_original_key, data)
+      end
+      event.set(@host_key, @host) if !event.include?(@host_key)
+      queue << event
+    end
+  end
 
   def default_stop
     $stdin.close rescue nil
