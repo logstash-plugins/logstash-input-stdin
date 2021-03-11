@@ -1,3 +1,6 @@
+## 3.3.0
+  - Feat: ECS support + review dependencies [#20](https://github.com/logstash-plugins/logstash-input-stdin/pull/20)
+
 ## 3.2.6
   - Docs: Set the default_codec doc attribute.
 
