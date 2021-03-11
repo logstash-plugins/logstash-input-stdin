@@ -1,7 +1,6 @@
 # encoding: utf-8
 require "logstash/inputs/base"
 require "logstash/namespace"
-require "concurrent/atomics"
 require 'logstash/plugin_mixins/ecs_compatibility_support'
 require "socket" # for Socket.gethostname
 require "jruby-stdin-channel"
