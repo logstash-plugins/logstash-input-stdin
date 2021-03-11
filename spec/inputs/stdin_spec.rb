@@ -1,7 +1,5 @@
 # encoding: utf-8
 require "logstash/devutils/rspec/spec_helper"
-require "insist"
-require "socket"
 require "logstash/inputs/stdin"
 
 describe LogStash::Inputs::Stdin do
@@ -19,7 +17,7 @@ describe LogStash::Inputs::Stdin do
       require "logstash/codecs/line"
       plugin = LogStash::Inputs::Stdin.new("codec" => LogStash::Codecs::Plain.new)
       plugin.register
-      insist { plugin.codec }.is_a?(LogStash::Codecs::Line)
+      expect( plugin.codec ).is_a?(LogStash::Codecs::Line)
     end
 
     it "switches from json to json_lines" do
@@ -27,7 +25,7 @@ describe LogStash::Inputs::Stdin do
       require "logstash/codecs/json_lines"
       plugin = LogStash::Inputs::Stdin.new("codec" => LogStash::Codecs::JSON.new)
       plugin.register
-      insist { plugin.codec }.is_a?(LogStash::Codecs::JSONLines)
+      expect( plugin.codec ).is_a?(LogStash::Codecs::JSONLines)
     end
   end
 end
