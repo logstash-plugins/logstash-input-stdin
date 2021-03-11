@@ -62,6 +62,11 @@ describe LogStash::Inputs::Stdin do
         expect( event.get('host') ).to eql 'hostname' => `hostname`.strip
       end
 
+      it "sets event.original" do
+        event = queue.pop
+        expect( event.get('event') ).to eql 'original' => stdin_data
+      end
+
     end
   end
 end

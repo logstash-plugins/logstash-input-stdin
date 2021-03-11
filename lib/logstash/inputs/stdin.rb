@@ -28,6 +28,7 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
     super
 
     @host_key = ecs_select[disabled: 'host', v1: '[host][hostname]']
+    @event_original_key = ecs_select[disabled: nil, v1: '[event][original]']
   end
 
   def register
@@ -59,6 +60,9 @@ class LogStash::Inputs::Stdin < LogStash::Inputs::Base
   def process(data, queue)
     @codec.decode(data) do |event|
       decorate(event)
+      if @event_original_key && !event.include?(@event_original_key)
+        event.set(@event_original_key, data)
+      end
       event.set(@host_key, @host) if !event.include?(@host_key)
       queue << event
     end
