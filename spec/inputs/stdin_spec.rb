@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "logstash/devutils/rspec/spec_helper"
+require 'logstash/plugin_mixins/ecs_compatibility_support/spec_helper'
 require "logstash/inputs/stdin"
 
 describe LogStash::Inputs::Stdin do
@@ -26,6 +27,41 @@ describe LogStash::Inputs::Stdin do
       plugin = LogStash::Inputs::Stdin.new("codec" => LogStash::Codecs::JSON.new)
       plugin.register
       expect( plugin.codec ).is_a?(LogStash::Codecs::JSONLines)
+    end
+  end
+
+  context 'ECS behavior', :ecs_compatibility_support do
+
+    subject { LogStash::Inputs::Stdin.new }
+
+    ecs_compatibility_matrix(:v1) do
+
+      before(:each) do
+        allow_any_instance_of(described_class).to receive(:ecs_compatibility).and_return(ecs_compatibility)
+
+        subject.register
+
+        subject.send :process, stdin_data, queue
+
+        expect( queue.size ).to eql 1
+      end
+
+      let(:queue) { Queue.new }
+
+      let(:stdin_data) { "a foo bar\n" }
+
+      after { subject.close }
+
+      it "sets message" do
+        event = queue.pop
+        expect( event.get('message') ).to eql 'a foo bar'
+      end
+
+      it "sets hostname" do
+        event = queue.pop
+        expect( event.get('host') ).to eql 'hostname' => `hostname`.strip
+      end
+
     end
   end
 end
