@@ -1,3 +1,6 @@
+## 3.4.0
+  - Add ECS v8 support as alias of v1 implementation
+
 ## 3.3.0
   - Feat: ECS support + review dependencies [#20](https://github.com/logstash-plugins/logstash-input-stdin/pull/20)
 

@@ -10,7 +10,7 @@ require "jruby-stdin-channel"
 # By default, each event is assumed to be one line. If you
 # want to join lines, you'll want to use the multiline codec.
 class LogStash::Inputs::Stdin < LogStash::Inputs::Base
-  include LogStash::PluginMixins::ECSCompatibilitySupport(:disabled, :v1)
+  include LogStash::PluginMixins::ECSCompatibilitySupport(:disabled, :v1, :v8 => :v1)
 
   config_name "stdin"
 
