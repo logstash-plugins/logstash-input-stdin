@@ -34,7 +34,7 @@ describe LogStash::Inputs::Stdin do
 
     subject { LogStash::Inputs::Stdin.new }
 
-    ecs_compatibility_matrix(:v1) do
+    ecs_compatibility_matrix(:v1, :v8 => :v1) do
 
       before(:each) do
         allow_any_instance_of(described_class).to receive(:ecs_compatibility).and_return(ecs_compatibility)
