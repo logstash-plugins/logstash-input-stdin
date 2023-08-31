@@ -49,12 +49,13 @@ describe LogStash::Inputs::Stdin do
       let(:queue) { Queue.new }
 
       let(:stdin_data) { "a foo bar\n" }
+      let(:origin_data) { "a foo bar" }
 
       after { subject.close }
 
       it "sets message" do
         event = queue.pop
-        expect( event.get('message') ).to eql 'a foo bar'
+        expect( event.get('message') ).to eql origin_data
       end
 
       it "sets hostname" do
@@ -64,7 +65,7 @@ describe LogStash::Inputs::Stdin do
 
       it "sets event.original" do
         event = queue.pop
-        expect( event.get('event') ).to eql 'original' => stdin_data
+        expect( event.get('event') ).to eql 'original' => origin_data
       end
 
     end
