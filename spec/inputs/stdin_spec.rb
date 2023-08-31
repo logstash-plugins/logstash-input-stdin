@@ -4,6 +4,7 @@ require 'logstash/plugin_mixins/ecs_compatibility_support/spec_helper'
 require "logstash/inputs/stdin"
 
 describe LogStash::Inputs::Stdin do
+
   context ".reloadable?" do
     subject { described_class }
 
@@ -31,8 +32,8 @@ describe LogStash::Inputs::Stdin do
   end
 
   context 'ECS behavior', :ecs_compatibility_support do
-
-    subject { LogStash::Inputs::Stdin.new }
+    require "logstash/codecs/json"
+    subject { LogStash::Inputs::Stdin.new("codec" => LogStash::Codecs::JSON.new) }
 
     ecs_compatibility_matrix(:v1, :v8 => :v1) do
 
@@ -49,13 +50,12 @@ describe LogStash::Inputs::Stdin do
       let(:queue) { Queue.new }
 
       let(:stdin_data) { "a foo bar\n" }
-      let(:origin_data) { "a foo bar" }
 
       after { subject.close }
 
       it "sets message" do
         event = queue.pop
-        expect( event.get('message') ).to eql origin_data
+        expect( event.get('message') ).to eql 'a foo bar'
       end
 
       it "sets hostname" do
@@ -65,7 +65,7 @@ describe LogStash::Inputs::Stdin do
 
       it "sets event.original" do
         event = queue.pop
-        expect( event.get('event') ).to eql 'original' => origin_data
+        expect( event.get('event') ).to eql 'original' => stdin_data
       end
 
     end
