@@ -32,8 +32,7 @@ describe LogStash::Inputs::Stdin do
   end
 
   context 'ECS behavior', :ecs_compatibility_support do
-    require "logstash/codecs/json"
-    subject { LogStash::Inputs::Stdin.new("codec" => LogStash::Codecs::JSON.new) }
+    subject { LogStash::Inputs::Stdin.new() }
 
     ecs_compatibility_matrix(:v1, :v8 => :v1) do
 
@@ -65,7 +64,7 @@ describe LogStash::Inputs::Stdin do
 
       it "sets event.original" do
         event = queue.pop
-        expect( event.get('event') ).to eql 'original' => stdin_data
+        expect( event.get('[event][original]').strip ).to eql stdin_data.strip
       end
 
     end
