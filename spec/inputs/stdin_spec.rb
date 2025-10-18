@@ -5,6 +5,8 @@ require "logstash/inputs/stdin"
 
 describe LogStash::Inputs::Stdin do
 
+  let(:host_name) { Socket.gethostname }
+
   context ".reloadable?" do
     subject { described_class }
 
@@ -59,7 +61,7 @@ describe LogStash::Inputs::Stdin do
 
       it "sets hostname" do
         event = queue.pop
-        expect( event.get('host') ).to eql 'hostname' => `hostname`.strip
+        expect( event.get('host') ).to eql 'hostname' => host_name
       end
 
       it "sets event.original" do
@@ -95,7 +97,7 @@ describe LogStash::Inputs::Stdin do
 
     it "sets hostname" do
       event = queue.pop
-      expect( event.get('host') ).to eql `hostname`.strip
+      expect( event.get('host') ).to eql host_name
     end
 
   end
