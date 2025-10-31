@@ -11,7 +11,7 @@ metadata:
   description: 'A pipeline for Logstash stdin plugin'
   links:
     - title: 'Logstash stdin pull request pipeline'
-      url: https://buildkite.com/elastic/logstash-input-stdin-pull-request
+      url: https://buildkite.com/logstash-plugins/logstash-input-stdin-pull-request
 spec:
   owner: group:logstash
   type: buildkite-pipeline
