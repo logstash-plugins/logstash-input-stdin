@@ -41,6 +41,8 @@ spec:
       teams:
         logstash:
           access_level: MANAGE_BUILD_AND_READ
+        logstash-core:
+          access_level: MANAGE_BUILD_AND_READ
         ingest-fp:
           access_level: MANAGE_BUILD_AND_READ
         ingest-eng-prod:
