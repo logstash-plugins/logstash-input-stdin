@@ -13,7 +13,7 @@ metadata:
     - title: 'Logstash stdin pull request pipeline'
       url: https://buildkite.com/logstash-plugins/logstash-input-stdin-pull-request
 spec:
-  owner: group:logstash
+  owner: group:logstash-core
   type: buildkite-pipeline
   system: platform-ingest
   implementation:
