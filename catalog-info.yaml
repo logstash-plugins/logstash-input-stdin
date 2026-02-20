@@ -20,7 +20,7 @@ spec:
     apiVersion: buildkite.elastic.dev/v1
     kind: Pipeline
     metadata:
-      description: ':logstash: Test `stdin` pull request :pipeline:'
+      description: ':logstash: `stdin` pull request tests :pipeline:'
       name: logstash-input-stdin-pull-request
     spec:
       pipeline_file: .buildkite/pull-request-pipeline.yml
@@ -33,13 +33,15 @@ spec:
         build_tags: false
         filter_enabled: true
         filter_condition: >-
-          build.creator.name == 'elasticmachine' && build.pull_request.id != null
+          build.pull_request.id != null
       cancel_intermediate_builds: true
       skip_intermediate_builds: true
       env:
         ELASTIC_PR_COMMENTS_ENABLED: 'true'
+        SLACK_NOTIFICATIONS_ON_SUCCESS: 'false'
+        SLACK_NOTIFICATIONS_SKIP_FOR_RETRIES: 'true'
       teams:
         logstash-core:
           access_level: MANAGE_BUILD_AND_READ
-        everyone:
+        employees:
           access_level: READ_ONLY
