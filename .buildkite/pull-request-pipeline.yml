@@ -3,3 +3,4 @@
     #!/usr/bin/env bash
     set -eo pipefail
     echo "--- Pull request pipeline preparation"
+    echo "Testing the pipeline run on BK."
